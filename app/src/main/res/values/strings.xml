@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ExecomQualify</string>
+
+    <string-array name="fff">
+        <item> Light</item>
+
+
+    </string-array>
+    <string name="title_activity_detail">DetailActivity</string>
+
+
 </resources>
