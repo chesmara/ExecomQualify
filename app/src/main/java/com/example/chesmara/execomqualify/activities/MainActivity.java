@@ -27,13 +27,17 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseHelper databaseHelper;
 
-    public static String LIST_KEY = "LIST_KEX";
+    public static String LIST_KEY = "LIST_KEY";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        if(toolbar != null) {
+            setSupportActionBar(toolbar);
+        }
 
 
         final ListView listView = (ListView) findViewById(R.id.shoping_lists);
