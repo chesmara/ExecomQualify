@@ -15,7 +15,7 @@ public class Articles {
     public static final String FIELD_NAME_ID = "id";
     public static final String FIELD_ARTICLE_NAME = "articlename";
     public static final String FIELD_ARTICLE_AMOUNT = "amount";
-    public static final String FIELD_NAME_ISCHECKED = "ischecked";
+    public static final String FIELD_NAME_CHECKED = "checked";
     public static final String FIELD_NAME_SHOPLIST= "shoplist";
 
 
@@ -29,11 +29,15 @@ public class Articles {
     @DatabaseField(columnName = FIELD_ARTICLE_AMOUNT)
     private String aAmount;
 
-    @DatabaseField(columnName = FIELD_NAME_ISCHECKED)
-    private boolean isChecked;
+   @DatabaseField(columnName = FIELD_NAME_CHECKED)
+    private boolean aChecked;
 
     @DatabaseField(columnName = FIELD_NAME_SHOPLIST, foreign = true, foreignAutoRefresh = true)
     private ShopList aShopList;
+
+
+    public  Articles(){}
+
 
     public int getaId() {
         return aId;
@@ -59,12 +63,12 @@ public class Articles {
         this.aAmount = aAmount;
     }
 
-    public boolean getisChecked() {
-        return isChecked;
+    public boolean isChecked() {
+        return aChecked;
     }
 
-    public void setisChecked(boolean checked) {
-        isChecked = checked;
+    public void setChecked(boolean aChecked) {
+        this.aChecked = aChecked;
     }
 
     public ShopList getaShopList() {
@@ -78,10 +82,8 @@ public class Articles {
 
     @Override
     public String toString() {
-        return "Articles{" +
-                "aName='" + aName + '\'' +
-                ", aAmount='" + aAmount + '\'' +
-                ", isChecked=" + isChecked +
-                '}';
+        return
+                 aName + ':' + ' ' +
+                 aAmount ;
     }
 }

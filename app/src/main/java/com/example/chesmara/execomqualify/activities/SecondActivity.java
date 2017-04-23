@@ -1,13 +1,13 @@
 package com.example.chesmara.execomqualify.activities;
 
 import android.app.Dialog;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,12 +19,12 @@ import com.example.chesmara.execomqualify.db.DatabaseHelper;
 import com.example.chesmara.execomqualify.db.model.Articles;
 import com.example.chesmara.execomqualify.db.model.ShopList;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
-import com.j256.ormlite.field.DatabaseField;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
+
     private DatabaseHelper databaseHelper;
     private ShopList sList;
 
@@ -32,7 +32,7 @@ public class SecondActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable  Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_second);
 
@@ -64,8 +64,8 @@ public class SecondActivity extends AppCompatActivity {
                     .query();
 
 
-            ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item);
-            listView.setAdapter(adapter);
+          ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, articlesList);
+          listView.setAdapter(adapter);
 
 
 
@@ -96,7 +96,7 @@ public class SecondActivity extends AppCompatActivity {
                 Button add= (Button) dialog.findViewById(R.id.add_article);
                 add.setOnClickListener(new View.OnClickListener(){
                     @Override
-                    public void onClic(View v) {
+                    public void onClick(View v) {
                         EditText articleName = (EditText) dialog.findViewById(R.id.article_name);
                         EditText artivleAmount = (EditText) dialog.findViewById(R.id.article_amount);
 
@@ -111,12 +111,36 @@ public class SecondActivity extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         refresh();
+
+                        dialog.dismiss();
                     }
                 });
 
-            case R.id.list_edit:
-                getDatabaseHelper().getmArticlesDao()
+                dialog.show();
 
+            case R.id.list_edit:
+
+                sList.setmName(lName.getText().toString());
+
+                try {
+                    getDatabaseHelper().getmShopListDao().update(sList);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+
+            case R.id.list_remove:
+
+                try {
+                    getDatabaseHelper().getmShopListDao().delete(sList);
+
+                    finish();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                break;
 
         }
 
