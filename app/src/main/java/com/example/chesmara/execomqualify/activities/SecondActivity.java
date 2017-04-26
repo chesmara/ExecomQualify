@@ -27,6 +27,7 @@ import com.example.chesmara.execomqualify.db.model.ShopList;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
@@ -45,16 +46,16 @@ public class SecondActivity extends AppCompatActivity {
 
         Toolbar toolbarDetail = (Toolbar) findViewById(R.id.toolbar_detail);
 
-        if(toolbarDetail != null) {
+        if (toolbarDetail != null) {
             setSupportActionBar(toolbarDetail);
         }
 
         int kojaLista = getIntent().getExtras().getInt(MainActivity.LIST_KEY);
 
         try {
-            sList= getDatabaseHelper().getmShopListDao().queryForId(kojaLista);
+            sList = getDatabaseHelper().getmShopListDao().queryForId(kojaLista);
 
-            lName=(EditText) findViewById(R.id.shoplist_name_detail);
+            lName = (EditText) findViewById(R.id.shoplist_name_detail);
             lName.setText(sList.getmName());
 
         } catch (SQLException e) {
@@ -62,37 +63,53 @@ public class SecondActivity extends AppCompatActivity {
         }
 
         final ListView listView = (ListView) findViewById(R.id.list_articles);
-                    listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+        List<Articles> notDoneArticles = new ArrayList<>();
+        List<Articles> DoneArticles = new ArrayList<>();
         try {
             final List<Articles> articlesList = getDatabaseHelper().getmArticlesDao().queryBuilder()
                     .where()
                     .eq(Articles.FIELD_NAME_SHOPLIST, sList.getmId())
                     .query();
 
-         // ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, articlesList);
 
-         ListAdapter adapter = new ArrayAdapter<> (this, android.R.layout.simple_list_item_multiple_choice, articlesList);
-          listView.setAdapter(adapter);
+
+
+
+            for (int i = 0; i < articlesList.size(); i++) {
+                if (articlesList.get(i).isChecked())
+                {
+                    notDoneArticles.add(articlesList.get(i));
+                } else {
+                    DoneArticles.add(articlesList.get(i));
+                }
+            }
+
+
+            // ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, articlesList);
+
+            ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, notDoneArticles /*articlesList*/);
+            listView.setAdapter(adapter);
             listView.setItemsCanFocus(false);
             listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
 
-        // onClick za brisanje stavki, nisam stavio refresh posle, nego se štikliraju, pa kad se izađe
-        // iz liste pa onovo uđe, onih štikliranih više nema
+            // onClick za brisanje stavki, nisam stavio refresh posle, nego se štikliraju, pa kad se izađe
+            // iz liste pa onovo uđe, onih štikliranih više nema
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Articles deleteArticle = (Articles) listView.getItemAtPosition(position);
-                    int deleteid=deleteArticle.getaId();
+                    int deleteid = deleteArticle.getaId();
                     try {
-                      //  getDatabaseHelper().getmArticlesDao().delete(deleteArticle);
+                        //  getDatabaseHelper().getmArticlesDao().delete(deleteArticle);
                         getDatabaseHelper().getmArticlesDao().queryForId(deleteid).setChecked(true);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
 
-                //refresh();
+                  // refresh();
 
                 }
             });
@@ -102,6 +119,10 @@ public class SecondActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // lista onih artikala koji su označeni kao urađeni
+                ListView listDone = (ListView) findViewById(R.id.list_done_articles);
+        ListAdapter doneAdapter = new ArrayAdapter<>(this, R.layout.list_item, DoneArticles);
+            listDone.setAdapter(doneAdapter);
 
     }
     @Override
@@ -136,7 +157,7 @@ public class SecondActivity extends AppCompatActivity {
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
-                        refresh();
+                       // refresh();
 
                         dialog.dismiss();
                     }
@@ -183,8 +204,14 @@ public class SecondActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        private void refresh(){
+       // refresh();
+    }
+
+    private void refresh(){
             ListView listview = (ListView) findViewById(R.id.list_articles);
 
             if(listview !=null){

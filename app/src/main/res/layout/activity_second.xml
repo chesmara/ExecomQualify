@@ -46,7 +46,10 @@
     </LinearLayout>
 
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <ListView
         android:id="@+id/list_articles"
         android:layout_width="match_parent"
@@ -54,5 +57,17 @@
         android:drawSelectorOnTop="false"
         android:choiceMode="multipleChoice"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Done"/>
+
+    <ListView
+        android:id="@+id/list_done_articles"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawSelectorOnTop="false"
+        />
+</LinearLayout>
 
 </LinearLayout>

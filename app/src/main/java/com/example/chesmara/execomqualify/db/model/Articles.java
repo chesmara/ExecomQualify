@@ -30,7 +30,7 @@ public class Articles {
     private String aAmount;
 
    @DatabaseField(columnName = FIELD_NAME_CHECKED)
-    private boolean aChecked;
+    public boolean aChecked;
 
     @DatabaseField(columnName = FIELD_NAME_SHOPLIST, foreign = true, foreignAutoRefresh = true)
     private ShopList aShopList;
