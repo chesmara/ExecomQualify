@@ -1,6 +1,7 @@
 package com.example.chesmara.execomqualify.activities;
 
 import android.app.Dialog;
+import android.app.ListActivity;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,11 +9,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.app.ListActivity;
+
 
 import com.example.chesmara.execomqualify.R;
 import com.example.chesmara.execomqualify.db.DatabaseHelper;
@@ -56,16 +60,19 @@ public class SecondActivity extends AppCompatActivity {
         }
 
         final ListView listView = (ListView) findViewById(R.id.list_articles);
-
+                    listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         try {
             List<Articles> articlesList = getDatabaseHelper().getmArticlesDao().queryBuilder()
                     .where()
                     .eq(Articles.FIELD_NAME_SHOPLIST, sList.getmId())
                     .query();
 
+       //   ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, articlesList);
 
-          ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, articlesList);
+         ListAdapter adapter = new ArrayAdapter<> (this, android.R.layout.simple_list_item_multiple_choice, articlesList);
           listView.setAdapter(adapter);
+            listView.setItemsCanFocus(false);
+            listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
 
 
@@ -112,6 +119,14 @@ public class SecondActivity extends AppCompatActivity {
                         }
                         refresh();
 
+                        dialog.dismiss();
+                    }
+                });
+
+                Button cancel= (Button) dialog.findViewById(R.id.cancel_article_input);
+                cancel.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view){
                         dialog.dismiss();
                     }
                 });

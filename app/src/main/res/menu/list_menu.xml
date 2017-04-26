@@ -7,14 +7,4 @@
         android:icon="@android:drawable/ic_menu_add"
         app:showAsAction="ifRoom" />
 
-    <item android:id="@+id/list_delete"
-        android:title="Delete list"
-        android:icon="@android:drawable/ic_input_delete"
-        app:showAsAction="ifRoom" />
-
-    <item android:id="@+id/creator_about"
-        android:title="About"
-        android:icon="@android:drawable/ic_dialog_info"
-        app:showAsAction="ifRoom" />
-
 </menu>
