@@ -17,7 +17,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/new_list_name"/>
+            android:id="@+id/new_list_name"
+            android:inputType="textCapSentences"/>
 
     </LinearLayout>
 
