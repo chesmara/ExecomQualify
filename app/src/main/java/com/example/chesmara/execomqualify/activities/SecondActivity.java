@@ -10,12 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.app.ListActivity;
+import android.widget.Toast;
 
 
 import com.example.chesmara.execomqualify.R;
@@ -62,12 +64,12 @@ public class SecondActivity extends AppCompatActivity {
         final ListView listView = (ListView) findViewById(R.id.list_articles);
                     listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
         try {
-            List<Articles> articlesList = getDatabaseHelper().getmArticlesDao().queryBuilder()
+            final List<Articles> articlesList = getDatabaseHelper().getmArticlesDao().queryBuilder()
                     .where()
                     .eq(Articles.FIELD_NAME_SHOPLIST, sList.getmId())
                     .query();
 
-       //   ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, articlesList);
+         // ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, articlesList);
 
          ListAdapter adapter = new ArrayAdapter<> (this, android.R.layout.simple_list_item_multiple_choice, articlesList);
           listView.setAdapter(adapter);
@@ -75,8 +77,25 @@ public class SecondActivity extends AppCompatActivity {
             listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
 
+        // onClick za brisanje stavki, nisam stavio refresh posle, nego se štikliraju, pa kad se izađe
+        // iz liste pa onovo uđe, onih štikliranih više nema
 
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Articles deleteArticle = (Articles) listView.getItemAtPosition(position);
+                    int deleteid=deleteArticle.getaId();
+                    try {
+                      //  getDatabaseHelper().getmArticlesDao().delete(deleteArticle);
+                        getDatabaseHelper().getmArticlesDao().queryForId(deleteid).setChecked(true);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
 
+                //refresh();
+
+                }
+            });
 
 
         } catch (SQLException e) {
