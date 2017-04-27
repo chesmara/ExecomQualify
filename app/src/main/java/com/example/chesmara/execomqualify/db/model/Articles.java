@@ -29,7 +29,7 @@ public class Articles {
     @DatabaseField(columnName = FIELD_ARTICLE_AMOUNT)
     private String aAmount;
 
-   @DatabaseField(columnName = FIELD_NAME_CHECKED)
+   @DatabaseField(columnName = FIELD_NAME_CHECKED , defaultValue = "false")
     public boolean aChecked;
 
     @DatabaseField(columnName = FIELD_NAME_SHOPLIST, foreign = true, foreignAutoRefresh = true)

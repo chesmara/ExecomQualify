@@ -37,37 +37,56 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="LIst"/>
-
         <EditText
             android:id="@+id/shoplist_name_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/textNotDone"
+            android:text="Not Done"/>
+<ScrollView
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    android:minHeight="250dp"
+    android:fillViewport="true"
+    >
+        <ListView
+            android:id="@+id/list_articles"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:choiceMode="multipleChoice">
+        </ListView>
+</ScrollView>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/textDone"
+            android:layout_height="match_parent"
+            android:text="Done"/>
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical"
+    android:minHeight="200dp"
+    android:fillViewport="true"
+    >
+        <ListView
+            android:id="@+id/list_done_articles"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:minHeight="300px">
+        </ListView>
+</ScrollView>
     </LinearLayout>
 
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <ListView
-        android:id="@+id/list_articles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:drawSelectorOnTop="false"
-        android:choiceMode="multipleChoice"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Done"/>
-
-    <ListView
-        android:id="@+id/list_done_articles"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:drawSelectorOnTop="false"
-        />
-</LinearLayout>
 
 </LinearLayout>

@@ -25,6 +25,7 @@ import com.example.chesmara.execomqualify.db.DatabaseHelper;
 import com.example.chesmara.execomqualify.db.model.Articles;
 import com.example.chesmara.execomqualify.db.model.ShopList;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class SecondActivity extends AppCompatActivity {
 
     private EditText lName;
 
+//--------------------------------------onCreate---------------------------------------
 
     @Override
     protected void onCreate(@Nullable  Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class SecondActivity extends AppCompatActivity {
         if (toolbarDetail != null) {
             setSupportActionBar(toolbarDetail);
         }
-
+      //--------------------------------------------------------------------------------
         int kojaLista = getIntent().getExtras().getInt(MainActivity.LIST_KEY);
 
         try {
@@ -61,55 +63,65 @@ public class SecondActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+      //--------------------------------------------------------------------------------
         final ListView listView = (ListView) findViewById(R.id.list_articles);
         listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+
         List<Articles> notDoneArticles = new ArrayList<>();
         List<Articles> DoneArticles = new ArrayList<>();
+
         try {
             final List<Articles> articlesList = getDatabaseHelper().getmArticlesDao().queryBuilder()
                     .where()
                     .eq(Articles.FIELD_NAME_SHOPLIST, sList.getmId())
                     .query();
 
-
-
-
-
             for (int i = 0; i < articlesList.size(); i++) {
                 if (articlesList.get(i).isChecked())
                 {
-                    notDoneArticles.add(articlesList.get(i));
-                } else {
                     DoneArticles.add(articlesList.get(i));
+                } else {
+                    notDoneArticles.add(articlesList.get(i));
                 }
             }
 
+            // ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, notDoneArticles);
 
-            // ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, articlesList);
-
-            ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, notDoneArticles /*articlesList*/);
+           ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, notDoneArticles );
             listView.setAdapter(adapter);
-            listView.setItemsCanFocus(false);
-            listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
+           // listView.setItemsCanFocus(false);
+            //listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
 
-            // onClick za brisanje stavki, nisam stavio refresh posle, nego se štikliraju, pa kad se izađe
-            // iz liste pa onovo uđe, onih štikliranih više nema
+            // listView onih artikala koji su označeni kao urađeni
+            ListView listDone = (ListView) findViewById(R.id.list_done_articles);
+            ListAdapter doneAdapter = new ArrayAdapter<>(this, R.layout.list_item, DoneArticles);
+            listDone.setAdapter(doneAdapter);
+
+
+
+            // onClick za brisanje uradjenih stavki,
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Articles deleteArticle = (Articles) listView.getItemAtPosition(position);
                     int deleteid = deleteArticle.getaId();
+
                     try {
-                        //  getDatabaseHelper().getmArticlesDao().delete(deleteArticle);
-                        getDatabaseHelper().getmArticlesDao().queryForId(deleteid).setChecked(true);
+                         //getDatabaseHelper().getmArticlesDao().delete(deleteArticle);
+                         //getDatabaseHelper().getmArticlesDao().queryForId(deleteid).setChecked(true);
+
+                        Dao<Articles, Integer> cecked = getDatabaseHelper().getmArticlesDao();
+                        Articles deleteArticle1= cecked.queryForId(deleteid);
+                                deleteArticle1.setChecked(true);
+                                    cecked.update(deleteArticle1);
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
 
-                  // refresh();
+                   refresh();
 
                 }
             });
@@ -119,12 +131,16 @@ public class SecondActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // lista onih artikala koji su označeni kao urađeni
-                ListView listDone = (ListView) findViewById(R.id.list_done_articles);
-        ListAdapter doneAdapter = new ArrayAdapter<>(this, R.layout.list_item, DoneArticles);
-            listDone.setAdapter(doneAdapter);
+          //--------------------------------------------------------------------------------------------
+
+
+
+
 
     }
+
+  //-----------------------------------------------------MENU-------------------------------------------------------
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
                 getMenuInflater().inflate(R.menu.articles_menu, menu);
@@ -157,7 +173,9 @@ public class SecondActivity extends AppCompatActivity {
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
-                       // refresh();
+
+
+                        refresh();
 
                         dialog.dismiss();
                     }
@@ -203,22 +221,25 @@ public class SecondActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+///--------------------------------------------on RESUME-----------------------------------------------------------------
 
     @Override
     protected void onResume() {
         super.onResume();
 
-       // refresh();
+        refresh();
     }
-
+//---------------------------------------------REFRESH --------------------------------------------------------------------
     private void refresh(){
             ListView listview = (ListView) findViewById(R.id.list_articles);
+            List<Articles> notDoneArticles = new ArrayList<>();
+            List<Articles> DoneArticles = new ArrayList<>();
 
             if(listview !=null){
-                ArrayAdapter<Articles> adapter = (ArrayAdapter<Articles>) listview.getAdapter();
+                ArrayAdapter<Articles> adapter1 = (ArrayAdapter<Articles>) listview.getAdapter();
 
-                if(adapter != null) {
-                    adapter.clear();
+                if(adapter1 != null) {
+                    adapter1.clear();
                     List<Articles> list = null;
 
                     try {
@@ -226,18 +247,39 @@ public class SecondActivity extends AppCompatActivity {
                                 .where()
                                 .eq(Articles.FIELD_NAME_SHOPLIST, sList.getmId())
                                 .query();
-                        adapter.addAll(list);
 
-                        adapter.notifyDataSetChanged();
+                        for (int i = 0; i < list.size(); i++) {
+                            if (list.get(i).isChecked())
+                            {
+                                DoneArticles.add(list.get(i));
+                            } else {
+                                notDoneArticles.add(list.get(i));
+                            }
+                        }
+
+                        adapter1.addAll(notDoneArticles);
+                            adapter1.notifyDataSetChanged();
+
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
 
-
-
-
                 }
             }
+         //--------------------------------------------------------
+            ListView listDone = (ListView) findViewById(R.id.list_done_articles);
+             if(listDone !=null){
+                 ArrayAdapter<Articles> adapter = (ArrayAdapter<Articles>) listDone.getAdapter();
+
+                 if(adapter !=null){
+                     adapter.clear();
+
+                     adapter.addAll(DoneArticles);
+                     adapter.notifyDataSetChanged();
+
+                 }
+
+             }
 
         }
 
