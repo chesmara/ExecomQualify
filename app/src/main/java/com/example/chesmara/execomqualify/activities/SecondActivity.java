@@ -85,22 +85,26 @@ public class SecondActivity extends AppCompatActivity {
                 }
             }
 
-            // ListAdapter adapter = new ArrayAdapter<> (this, R.layout.list_item, notDoneArticles);
 
-           ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, notDoneArticles );
+           // ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, notDoneArticles );
+
+            ListAdapter adapter = new ArrayAdapter<>(this, R.layout.list_item, notDoneArticles );
             listView.setAdapter(adapter);
-           // listView.setItemsCanFocus(false);
+
+            
+            //listView.setItemsCanFocus(false);
             //listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
 
 
             // listView onih artikala koji su označeni kao urađeni
+
             ListView listDone = (ListView) findViewById(R.id.list_done_articles);
             ListAdapter doneAdapter = new ArrayAdapter<>(this, R.layout.list_item, DoneArticles);
             listDone.setAdapter(doneAdapter);
 
 
 
-            // onClick za brisanje uradjenih stavki,
+            // onClick za brisanje uradjenih stavki - checking
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -109,8 +113,6 @@ public class SecondActivity extends AppCompatActivity {
                     int deleteid = deleteArticle.getaId();
 
                     try {
-                         //getDatabaseHelper().getmArticlesDao().delete(deleteArticle);
-                         //getDatabaseHelper().getmArticlesDao().queryForId(deleteid).setChecked(true);
 
                         Dao<Articles, Integer> cecked = getDatabaseHelper().getmArticlesDao();
                         Articles deleteArticle1= cecked.queryForId(deleteid);
@@ -130,11 +132,6 @@ public class SecondActivity extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-          //--------------------------------------------------------------------------------------------
-
-
-
 
 
     }
@@ -282,12 +279,6 @@ public class SecondActivity extends AppCompatActivity {
              }
 
         }
-
-
-
-
-
-
 
 
 

@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
         }
 
-
+//---------------------------------------prikaz spiska ShopListi--------------------------
         final ListView listView = (ListView) findViewById(R.id.shoping_lists);
 
 
